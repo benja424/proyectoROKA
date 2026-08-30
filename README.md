@@ -33,7 +33,7 @@ El sistema está diseñado para ser utilizado tanto por personal administrativo 
 ## Tecnologías Utilizadas
 
 * Backend: PHP
-* Base de datos: MySQL / MariaDB
+* Base de datos: MySQL 8.0
 * Frontend: Bootstrap 5.3
 * Control de versiones: Git y GitHub
 * Entorno de desarrollo: Visual Studio Code
