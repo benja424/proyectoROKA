@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Admin | S.I.G.S.M. — Hospital de Clínicas</title>
+  <link rel="icon" type="image/png" href="/sigsm/frontend/img/logohc.png">
+  <link href="/sigsm/frontend/css/portal-admin.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+
+    <div class="marca">
+      <img src="/sigsm/frontend/img/logohc.png" alt="Hospital de Clínicas Dr. Manuel Quintela" class="marca__logo">
+    </div>
+
+    <div class="header-acciones">
+
+      <!-- Dark mode toggle -->
+      <div class="dark-toggle">
+        <span class="dark-toggle__label">Modo nocturno</span>
+        <label class="toggle" aria-label="Activar modo nocturno">
+          <input type="checkbox" id="dark-toggle">
+          <span class="toggle__track"></span>
+        </label>
+      </div>
+
+      <!-- Usuario -->
+      <div class="header-usuario">
+        <span class="header-usuario__nombre"></span>
+        <span class="header-usuario__rol"></span>
+      </div>
+
+      <!-- Logout -->
+      <a href="/sigsm/frontend/login.html" class="btn-logout">
+        <img src="/sigsm/frontend/img/logout.png" alt="" class="btn-logout__icono" aria-hidden="true">
+        <span>Cerrar sesión</span>
+      </a>
+
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="admin-main">
+
+  <div class="admin-bienvenida">
+    <h1>Bienvenido, <span id="bienvenida-nombre"></span></h1>
+    <p>Seleccioná el módulo al que querés acceder.</p>
+  </div>
+
+<div class="modulos">
+
+  <a href="/sigsm/frontend/modulo-documentacion.html" class="modulo-card" data-roles="root,Gestion_General,Division_Enfermeria">
+    <div class="modulo-card__icono">
+      <img src="/sigsm/frontend/img/busqueda.png" alt="">
+    </div>
+    <span class="modulo-card__nombre">Módulo Documentación</span>
+    <span class="modulo-card__desc">Gestión y acceso a documentos para pacientes. Carga, edición y administración de archivos.</span>
+    <span class="modulo-card__acceder">Acceder →</span>
+  </a>
+
+  <a href="/sigsm/frontend/modulo-ambulancias.html" class="modulo-card" data-roles="root,Gestion_General,Division_Transito">
+    <div class="modulo-card__icono">
+      <img src="/sigsm/frontend/img/ambulancia.png" alt="">
+    </div>
+    <span class="modulo-card__nombre">Módulo Ambulancias</span>
+    <span class="modulo-card__desc">Gestión de traslados, solicitudes y seguimiento de ambulancias y vehículos del hospital.</span>
+    <span class="modulo-card__acceder">Acceder →</span>
+  </a>
+
+  <a href="/sigsm/frontend/modulo-usuarios.html" class="modulo-card" data-roles="root">
+    <div class="modulo-card__icono">
+      <img src="/sigsm/frontend/img/usuario.png" alt="">
+    </div>
+    <span class="modulo-card__nombre">Gestión de Usuarios</span>
+    <span class="modulo-card__desc">Registro, edición y eliminación de usuarios del sistema. Solo accesible para el administrador.</span>
+    <span class="modulo-card__acceder">Acceder →</span>
+  </a>
+
+</div>
+
+</main>
+
+  <script src="/sigsm/frontend/js/auth.js"></script>
+  <script src="/sigsm/frontend/js/portal-admin.js"></script>
+</body>
+</html>

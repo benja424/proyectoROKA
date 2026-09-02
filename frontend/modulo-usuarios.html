@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Usuarios | S.I.G.S.M.</title>
+  <link rel="icon" type="image/png" href="/sigsm/frontend/img/logohc.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/sigsm/frontend/css/modulo-usuarios.css">
+</head>
+<body>
+
+<div class="contenedor">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <h1 class="topbar__titulo">Gestión de Usuarios</h1>
+    <a href="/sigsm/frontend/portal-admin.html" class="btn-volver">← Volver al portal</a>
+  </div>
+
+  <!-- Formulario nuevo usuario -->
+  <p class="seccion-titulo">Registrar nuevo usuario</p>
+  <div class="form-card">
+    <form id="formUsuario">
+      <div class="form-grid">
+
+        <div class="campo">
+          <label for="ci">Cédula de identidad</label>
+          <input type="text" id="ci" placeholder="Ej: 12345678" maxlength="10">
+        </div>
+
+        <div class="campo">
+          <label for="user_name">Usuario</label>
+          <input type="text" id="user_name" placeholder="Ej: jperez">
+        </div>
+
+        <div class="campo">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" placeholder="Ej: Juan">
+        </div>
+
+        <div class="campo">
+          <label for="apellido">Apellido</label>
+          <input type="text" id="apellido" placeholder="Ej: Pérez">
+        </div>
+
+        <div class="campo">
+          <label for="pass">Contraseña</label>
+          <input type="password" id="pass" placeholder="••••••••">
+        </div>
+
+        <div class="campo">
+          <label for="rol">Rol</label>
+          <select id="rol">
+            <option value="" disabled selected>Seleccioná un rol</option>
+            <option value="Gestion_General">Gestión General</option>
+            <option value="Division_Enfermeria">División Enfermería</option>
+            <option value="Division_Transito">División Tránsito</option>
+          </select>
+        </div>
+
+      </div>
+
+      <p id="mensaje-form" style="font-size:0.85rem; min-height:20px;"></p>
+
+      <div class="form-footer">
+        <button type="submit" class="btn-agregar">Registrar usuario</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista de usuarios -->
+  <p class="seccion-titulo">Usuarios registrados</p>
+  <div class="doc-lista" id="lista-usuarios">
+    <p class="cargando">Cargando usuarios...</p>
+  </div>
+
+</div>
+
+<script src="/sigsm/frontend/js/auth.js"></script>
+<script src="/sigsm/frontend/js/modulo-usuarios.js"></script>
+<script>
+  if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');
+</script>
+</body>
+</html>

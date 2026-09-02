@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo Documentación | S.I.G.S.M.</title>
+  <link rel="icon" type="image/png" href="/sigsm/frontend/img/logohc.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/sigsm/frontend/css/modulo-documentacion.css">
+</head>
+<body>
+
+<div class="contenedor">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <h1 class="topbar__titulo">Módulo Documentación</h1>
+    <div class="topbar__acciones">
+      <a href="/sigsm/frontend/portal-admin.html" class="btn-volver">← Volver al portal</a>
+    </div>
+  </div>
+
+  <!-- Formulario nuevo documento -->
+  <p class="seccion-titulo">Agregar documento</p>
+  <div class="form-card">
+    <form onsubmit="return false;">
+      <div class="form-grid">
+
+        <div class="campo campo--full">
+          <label for="doc-nombre">Nombre del documento</label>
+          <input type="text" id="doc-nombre" placeholder="Ej: Preparación para estudios imagenológicos">
+        </div>
+
+        <div class="campo">
+          <label for="doc-categoria">Categoría</label>
+          <select id="doc-categoria">
+            <option value="" disabled selected>Seleccioná una categoría</option>
+            <option>Estudios y diagnóstico</option>
+            <option>Cirugía y procedimientos</option>
+            <option>Tratamientos y medicación</option>
+            <option>Nefrología y trasplante</option>
+            <option>Otras pautas</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="doc-archivo">Archivo PDF</label>
+          <input type="file" id="doc-archivo" accept=".pdf">
+        </div>
+
+      </div>
+      <div class="form-footer">
+        <button type="submit" class="btn-agregar">Agregar documento</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista de documentos cargados -->
+  <p class="seccion-titulo">Documentos cargados</p>
+  <div class="doc-lista">
+
+    <div class="doc-fila">
+      <span class="doc-fila__titulo">Preparación para estudios imagenológicos</span>
+      <span class="doc-fila__cat">Estudios y diagnóstico</span>
+      <button class="btn-eliminar">Eliminar</button>
+    </div>
+
+    <div class="doc-fila">
+      <span class="doc-fila__titulo">Estudios diagnósticos con pertecneciato</span>
+      <span class="doc-fila__cat">Estudios y diagnóstico</span>
+      <button class="btn-eliminar">Eliminar</button>
+    </div>
+
+    <div class="doc-fila">
+      <span class="doc-fila__titulo">Centellograma de perfusión miocárdica</span>
+      <span class="doc-fila__cat">Estudios y diagnóstico</span>
+      <button class="btn-eliminar">Eliminar</button>
+    </div>
+
+    <div class="doc-fila">
+      <span class="doc-fila__titulo">Indicaciones de interrupción voluntaria del embarazo</span>
+      <span class="doc-fila__cat">Cirugía y procedimientos</span>
+      <button class="btn-eliminar">Eliminar</button>
+    </div>
+
+    <div class="doc-fila">
+      <span class="doc-fila__titulo">Prostatectomía radical — indicaciones e información</span>
+      <span class="doc-fila__cat">Cirugía y procedimientos</span>
+      <button class="btn-eliminar">Eliminar</button>
+    </div>
+
+    <div class="doc-fila">
+      <span class="doc-fila__titulo">Indicaciones para pacientes en tratamiento con warfarina</span>
+      <span class="doc-fila__cat">Tratamientos y medicación</span>
+      <button class="btn-eliminar">Eliminar</button>
+    </div>
+
+    <div class="doc-fila">
+      <span class="doc-fila__titulo">Indicaciones para ingreso a centro de nefrología y trasplante</span>
+      <span class="doc-fila__cat">Nefrología y trasplante</span>
+      <button class="btn-eliminar">Eliminar</button>
+    </div>
+
+    <div class="doc-fila">
+      <span class="doc-fila__titulo">Plan de alta de enfermería — Nefrología</span>
+      <span class="doc-fila__cat">Nefrología y trasplante</span>
+      <button class="btn-eliminar">Eliminar</button>
+    </div>
+
+    <div class="doc-fila">
+      <span class="doc-fila__titulo">Prevención de infecciones</span>
+      <span class="doc-fila__cat">Nefrología y trasplante</span>
+      <button class="btn-eliminar">Eliminar</button>
+    </div>
+
+    <div class="doc-fila">
+      <span class="doc-fila__titulo">Pauta para pacientes ostomizados</span>
+      <span class="doc-fila__cat">Otras pautas</span>
+      <button class="btn-eliminar">Eliminar</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // Heredar dark mode del portal admin
+  if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');
+</script>
+
+  <script src="/sigsm/frontend/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await verificarSesion();
+    });
+  </script>
+</body>
+</html>

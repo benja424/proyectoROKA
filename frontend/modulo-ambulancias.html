@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo Ambulancias | S.I.G.S.M.</title>
+  <link rel="icon" type="image/png" href="/sigsm/frontend/img/logohc.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/sigsm/frontend/css/modulo-ambulancias.css">
+</head>
+<body>
+
+<div class="contenedor">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <h1 class="topbar__titulo">Módulo Ambulancias</h1>
+    <a href="/sigsm/frontend/portal-admin.html" class="btn-volver">← Volver al portal</a>
+  </div>
+
+  <!-- Cards ambulancias -->
+  <p class="seccion-titulo">Estado de unidades</p>
+  <div class="ambulancias-grid">
+
+    <div class="ambulancia-card">
+      <div class="ambulancia-card__header">
+        <span class="ambulancia-card__nombre">Unidad 01</span>
+        <span class="ambulancia-card__patente">SBQ 1234</span>
+      </div>
+      <span class="estado estado--disponible">Disponible</span>
+      <p class="ambulancia-card__info">Ambulancia de traslado general. Sin chofer asignado actualmente.</p>
+    </div>
+
+    <div class="ambulancia-card">
+      <div class="ambulancia-card__header">
+        <span class="ambulancia-card__nombre">Unidad 02</span>
+        <span class="ambulancia-card__patente">SBQ 5678</span>
+      </div>
+      <span class="estado estado--en-traslado">En traslado</span>
+      <p class="ambulancia-card__info">En camino a destino. Salida: 14:30 — Destino: Paysandú.</p>
+    </div>
+
+    <div class="ambulancia-card">
+      <div class="ambulancia-card__header">
+        <span class="ambulancia-card__nombre">Unidad 03</span>
+        <span class="ambulancia-card__patente">SBQ 9012</span>
+      </div>
+      <span class="estado estado--no-disponible">No disponible</span>
+      <p class="ambulancia-card__info">Unidad en mantenimiento. Retorno estimado: 18:00 hs.</p>
+    </div>
+
+  </div>
+
+  <!-- Formulario nuevo pedido -->
+  <p class="seccion-titulo">Registrar nuevo pedido de traslado</p>
+  <div class="form-card">
+    <form onsubmit="return false;">
+      <div class="form-grid">
+
+        <div class="campo">
+          <label for="pedido-unidad">Unidad asignada</label>
+          <select id="pedido-unidad">
+            <option value="" disabled selected>Seleccioná una unidad</option>
+            <option>Unidad 01 — SBQ 1234 (Disponible)</option>
+            <option disabled>Unidad 02 — SBQ 5678 (En traslado)</option>
+            <option disabled>Unidad 03 — SBQ 9012 (No disponible)</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="pedido-chofer">Chofer</label>
+          <select id="pedido-chofer">
+            <option value="" disabled selected>Seleccioná un chofer</option>
+            <option>Carlos Rodríguez</option>
+            <option>María González</option>
+            <option>Luis Pérez</option>
+            <option>Ana Martínez</option>
+            <option>Roberto Silva</option>
+            <option>Laura Fernández</option>
+            <option>Diego López</option>
+            <option>Patricia Díaz</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="pedido-enfermero">Enfermero/a</label>
+          <select id="pedido-enfermero">
+            <option value="" disabled selected>Seleccioná un enfermero/a</option>
+            <option>Julia Méndez</option>
+            <option>Sebastián Torres</option>
+            <option>Valentina Herrera</option>
+            <option>Andrés Morales</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="pedido-horario">Horario de salida</label>
+          <input type="time" id="pedido-horario">
+        </div>
+
+        <div class="campo campo--full">
+          <label for="pedido-direccion">Dirección de destino</label>
+          <input type="text" id="pedido-direccion" placeholder="Ej: Av. 18 de Julio 1234, Montevideo">
+        </div>
+
+        <div class="campo campo--full">
+          <label for="pedido-observaciones">Observaciones</label>
+          <textarea id="pedido-observaciones" placeholder="Tipo de traslado, indicaciones especiales, etc."></textarea>
+        </div>
+
+      </div>
+      <div class="form-footer">
+        <button type="submit" class="btn-registrar">Registrar pedido</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<script>
+  if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');
+</script>
+
+  <script src="/sigsm/frontend/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await verificarSesion();
+    });
+  </script>
+</body>
+</html>
