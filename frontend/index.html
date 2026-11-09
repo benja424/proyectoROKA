@@ -38,12 +38,9 @@
       <button type="submit" class="buscador__btn">Buscar</button>
     </form>
 
-    <div class="filtros" role="group" aria-label="Filtrar por categoría">
-      <button class="filtro-chip" data-filtro="todos"        aria-pressed="true">Todos</button>
-      <button class="filtro-chip" data-filtro="estudios"     aria-pressed="false">Estudios y diagnóstico</button>
-      <button class="filtro-chip" data-filtro="cirugia"      aria-pressed="false">Cirugía y procedimientos</button>
-      <button class="filtro-chip" data-filtro="tratamientos" aria-pressed="false">Tratamientos</button>
-      <button class="filtro-chip" data-filtro="nefrologia"   aria-pressed="false">Nefrología y trasplante</button>
+    <!-- Las categorías se cargan desde la base de datos -->
+    <div class="filtros" id="filtros" role="group" aria-label="Filtrar por categoría">
+      <button class="filtro-chip" data-filtro="" aria-pressed="true">Todos</button>
     </div>
   </div>
 </section>
@@ -51,91 +48,30 @@
 <!-- MAIN -->
 <main class="documentos">
   <div class="contenedor">
-<!-- Lista plana de documentos -->
-    <div class="doc-lista" id="doc-lista">
+    <!-- Visor del documento (se muestra al elegir uno o al entrar por QR: index.html?doc=ID) -->
+    <section class="visor" id="visor" hidden aria-labelledby="visor-titulo">
+      <button type="button" class="visor__volver" id="visor-volver">← Volver a la lista</button>
+      <h2 class="visor__titulo" id="visor-titulo"></h2>
+      <p class="visor__cat" id="visor-cat"></p>
+      <p class="visor__desc" id="visor-desc"></p>
+      <p class="visor__estado" id="visor-estado"></p>
+      <div class="visor__marco" id="visor-marco"></div>
+    </section>
 
-      <a class="doc-fila" data-titulo="preparación para estudios imagenológicos" data-categoria="estudios">
-        <span class="doc-fila__titulo">Preparación para estudios imagenológicos</span>
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
-      <a class="doc-fila" data-titulo="estudios diagnósticos con pertecneciato" data-categoria="estudios">
-        <span class="doc-fila__titulo">Estudios diagnósticos con pertecneciato</span>
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
-      <a class="doc-fila" data-titulo="centellograma de perfusión miocárdica" data-categoria="estudios">
-        <span class="doc-fila__titulo">Centellograma de perfusión miocárdica</span>        
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
-      <a class="doc-fila" data-titulo="indicaciones ecocardiograma con dobutamina" data-categoria="estudios">
-        <span class="doc-fila__titulo">Indicaciones ecocardiograma con dobutamina</span>
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
-      <a class="doc-fila" data-titulo="indicaciones de interrupción voluntaria del embarazo" data-categoria="cirugia">
-        <span class="doc-fila__titulo">Indicaciones de interrupción voluntaria del embarazo</span>
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
-      <a class="doc-fila" data-titulo="prostatectomía radical indicaciones e información" data-categoria="cirugia">
-        <span class="doc-fila__titulo">Prostatectomía radical — indicaciones e información</span>
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
-      <a class="doc-fila" data-titulo="indicaciones ecocardiograma transesofágico" data-categoria="cirugia">
-        <span class="doc-fila__titulo">Indicaciones ecocardiograma transesofágico</span>
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
-      <a class="doc-fila" data-titulo="indicaciones para pacientes en tratamiento con warfarina" data-categoria="tratamientos">
-        <span class="doc-fila__titulo">Indicaciones para pacientes en tratamiento con warfarina</span>
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
-      <a class="doc-fila" data-titulo="pauta para pacientes ostomizados" data-categoria="tratamientos">
-        <span class="doc-fila__titulo">Pauta para pacientes ostomizados</span>
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
-      <a class="doc-fila" data-titulo="indicaciones para ingreso a centro de nefrología y trasplante" data-categoria="nefrologia">
-        <span class="doc-fila__titulo">Indicaciones para ingreso a centro de nefrología y trasplante</span>
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
-      <a class="doc-fila" data-titulo="plan de alta de enfermería nefrología" data-categoria="nefrologia">
-        <span class="doc-fila__titulo">Plan de alta de enfermería — Nefrología</span>
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
-      <a class="doc-fila" data-titulo="indicaciones de enfermería para usuarios trasplantados" data-categoria="nefrologia">
-        <span class="doc-fila__titulo">Indicaciones de enfermería para usuarios trasplantados</span>
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
-      <a  class="doc-fila" data-titulo="prevención de infecciones" data-categoria="nefrologia">
-        <span class="doc-fila__titulo">Prevención de infecciones</span>
-        <span class="doc-fila__ver">Ver →</span>
-      </a>
-
+    <!-- Lista plana de documentos (se carga desde la base de datos) -->
+    <div id="seccion-lista">
+      <div class="doc-lista" id="doc-lista"></div>
+      <p class="sin-resultados" id="sin-resultados">No se encontraron documentos.</p>
     </div>
 
     <!-- Sección encuestas -->
-    <section class="encuestas">
+    <!-- Se muestra solo si hay encuestas públicas (se cargan desde la base de datos) -->
+    <section class="encuestas" id="seccion-encuestas" hidden>
       <p class="encuestas__titulo">Encuestas de satisfacción</p>
-      <div class="encuestas-grid">
-        <a href="#" class="encuesta-card">
-          <span class="encuesta-card__nombre">Encuesta estándar de satisfacción</span>
-          <span class="encuesta-card__accion">Responder →</span>
-        </a>
-        <a href="#" class="encuesta-card">
-          <span class="encuesta-card__nombre">Encuesta de evolución — Fondo Nacional de Recursos</span>
-          <span class="encuesta-card__accion">Responder →</span>
-        </a>
-      </div>
+      <div class="encuestas-grid" id="encuestas-grid"></div>
     </section>
 
+  </div>
 </main>
 
 <!-- FOOTER -->
@@ -170,38 +106,9 @@
   </div>
 </footer>
 
-<script>
-  const input  = document.getElementById('buscador-input');
-  const chips  = document.querySelectorAll('.filtro-chip');
-  const filas  = document.querySelectorAll('.doc-fila');
-  const sinRes = document.getElementById('sin-resultados');
-
-  function filtrar() {
-    const texto  = input.value.trim().toLowerCase();
-    const activo = document.querySelector('.filtro-chip[aria-pressed="true"]').dataset.filtro;
-    let total    = 0;
-
-    filas.forEach(fila => {
-      const coincideTexto = texto === '' || fila.dataset.titulo.includes(texto);
-      const coincideCat   = activo === 'todos' || fila.dataset.categoria === activo;
-      const visible       = coincideTexto && coincideCat;
-      fila.toggleAttribute('hidden', !visible);
-      if (visible) total++;
-    });
-
-    sinRes.style.display = total === 0 ? 'block' : 'none';
-  }
-
-  input.addEventListener('input', filtrar);
-
-  chips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      chips.forEach(c => c.setAttribute('aria-pressed', 'false'));
-      chip.setAttribute('aria-pressed', 'true');
-      filtrar();
-    });
-  });
-</script>
+<script src="/sigsm/frontend/js/comun.js"></script>
+<script src="/sigsm/frontend/js/lib/pdfjs/pdf.min.js"></script>
+<script src="/sigsm/frontend/js/portal-usuario.js"></script>
 
 </body>
 </html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encuesta | S.I.G.S.M. — Hospital de Clínicas</title>
+  <link rel="icon" type="image/png" href="/sigsm/frontend/img/logohc.png">
+  <link href="/sigsm/frontend/css/encuesta.css" rel="stylesheet">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/sigsm/frontend/index.html" class="marca">
+      <img src="/sigsm/frontend/img/logohc.png" alt="Hospital de Clínicas Dr. Manuel Quintela" class="marca__logo">
+    </a>
+  </div>
+</header>
+
+<main class="contenedor">
+  <a href="/sigsm/frontend/index.html" class="volver">← Volver al portal</a>
+
+  <section id="encuesta" hidden>
+    <p class="cat" id="enc-cat"></p>
+    <h1 id="enc-titulo"></h1>
+    <p class="desc" id="enc-desc"></p>
+    <p class="anonima">La encuesta es anónima: no se guarda ningún dato tuyo.</p>
+
+    <form id="form-respuestas" novalidate>
+      <div id="preguntas"></div>
+      <p class="mensaje" id="mensaje" role="alert"></p>
+      <button type="submit" class="btn-enviar" id="btn-enviar">Enviar respuestas</button>
+    </form>
+  </section>
+
+  <!-- Se muestra al enviar o si la encuesta no está disponible -->
+  <section class="aviso" id="aviso" hidden>
+    <h1 id="aviso-titulo"></h1>
+    <p id="aviso-texto"></p>
+    <a href="/sigsm/frontend/index.html" class="btn-enviar">Volver al portal</a>
+  </section>
+</main>
+
+<script src="/sigsm/frontend/js/comun.js"></script>
+<script src="/sigsm/frontend/js/encuesta.js"></script>
+</body>
+</html>

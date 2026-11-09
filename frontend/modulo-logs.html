@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de actividad | S.I.G.S.M.</title>
+  <link rel="icon" type="image/png" href="/sigsm/frontend/img/logohc.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/sigsm/frontend/css/modulo-logs.css">
+</head>
+<body>
+<script>if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');</script>
+
+<div class="contenedor">
+
+  <div class="topbar">
+    <h1 class="topbar__titulo">Registro de actividad</h1>
+    <a href="/sigsm/frontend/portal-admin.html" class="btn-volver">← Volver al portal</a>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <div class="campo">
+      <label for="f-modulo">Módulo</label>
+      <select id="f-modulo"><option value="">Todos</option></select>
+    </div>
+    <div class="campo">
+      <label for="f-accion">Acción</label>
+      <select id="f-accion"><option value="">Todas</option></select>
+    </div>
+    <div class="campo">
+      <label for="f-usuario">Usuario</label>
+      <select id="f-usuario"><option value="">Todos</option></select>
+    </div>
+    <div class="campo">
+      <label for="f-desde">Desde</label>
+      <input type="date" id="f-desde">
+    </div>
+    <div class="campo">
+      <label for="f-hasta">Hasta</label>
+      <input type="date" id="f-hasta">
+    </div>
+    <div class="campo campo--boton">
+      <button type="button" class="btn-limpiar" id="btn-limpiar">Limpiar filtros</button>
+    </div>
+  </div>
+
+  <p class="resumen" id="resumen"></p>
+
+  <!-- Lista de logs -->
+  <div class="log-lista" id="lista"></div>
+
+</div>
+
+<script src="/sigsm/frontend/js/comun.js"></script>
+<script src="/sigsm/frontend/js/auth.js"></script>
+<script src="/sigsm/frontend/js/modulo-logs.js"></script>
+</body>
+</html>

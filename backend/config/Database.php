@@ -1,9 +1,18 @@
 <?php
 // Credenciales de conexión a la base de datos
+// La aplicación NO usa root: usa sigsm_app, que solo tiene los permisos necesarios
+// (ver backend/database/usuarios_bd.sql). Al instalar en el servidor, cambiar la contraseña
+// en ese script y acá.
 define('SERVERNAME', 'localhost');
-define('USERNAME', 'root');
-define('PASSWORD', '');
+define('USERNAME', 'sigsm_app');
+define('PASSWORD', 'App.Sigsm#2026');
 define('DBNAME', 'sigsm');
+
+// Hora de Uruguay en PHP y en MySQL (XAMPP trae por defecto Europe/Berlin).
+// Sin esto "ahora" sería distinto en PHP y en la base, y fallaría la regla de horarios.
+define('ZONA_HORARIA', 'America/Montevideo');
+define('ZONA_HORARIA_MYSQL', '-03:00');
+date_default_timezone_set(ZONA_HORARIA);
 
 // Clase de conexión — patrón Singleton
 // Solo existe una instancia de la conexión en toda la aplicación
@@ -16,14 +25,11 @@ class Database
     private function __construct()
     {
         $dsn = "mysql:host=" . SERVERNAME . ";dbname=" . DBNAME . ";charset=utf8mb4";
-
-        try {
-            $this->conexion = new PDO($dsn, USERNAME, PASSWORD);
-            // PDO lanza excepciones en vez de errores silenciosos
-            $this->conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            throw new PDOException($e->getMessage(), $e->getCode());
-        }
+        $this->conexion = new PDO($dsn, USERNAME, PASSWORD, [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // errores como excepciones
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // filas como arrays asociativos
+        ]);
+        $this->conexion->exec("SET time_zone = '" . ZONA_HORARIA_MYSQL . "'");
     }
 
     // Devuelve la única instancia — la crea si no existe todavía

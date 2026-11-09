@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
     const usuario = await verificarSesion();
+    if (!usuario) return;   // sin sesión: verificarSesion ya redirigió al login
 
     // Mostramos nombre y rol en el header
     const nombre = document.querySelector('.header-usuario__nombre');

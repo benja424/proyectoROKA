@@ -1,16 +1,9 @@
 <?php
-// Endpoint de verificación de sesión
-// El frontend lo consulta al cargar páginas protegidas
-header('Content-Type: application/json; charset=utf-8');
+// Endpoint de verificación de sesión — lo consultan las páginas protegidas al cargar
+require_once __DIR__ . '/../backend/negocio/Autorizacion.php';
 
-session_start();
+$usuario = Autorizacion::usuarioActual();   // null si no hay sesión o si lo inhabilitaron
 
-if (!isset($_SESSION['usuario'])) {
-    echo json_encode(['autenticado' => false]);
-    exit;
-}
-
-echo json_encode([
-    'autenticado' => true,
-    'usuario'     => $_SESSION['usuario']
-]);
+echo json_encode($usuario === null
+    ? ['autenticado' => false]
+    : ['autenticado' => true, 'usuario' => $usuario]);

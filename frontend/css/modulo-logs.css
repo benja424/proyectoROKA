@@ -1,0 +1,153 @@
+/* ============================================
+   S.I.G.S.M. — Registro de actividad (logs)
+   ============================================ */
+
+:root {
+  --azul-fuerte: #00aeef;
+  --azul-oscuro: #047aa6;
+  --azul-fondo:  #eaf7fd;
+  --radio:       10px;
+  --font-base:   'Inter', system-ui, sans-serif;
+  --font-marca:  'Source Serif 4', Georgia, serif;
+
+  --bg-body:         #f4f8fb;
+  --bg-card:         #ffffff;
+  --bg-input:        #ffffff;
+  --bg-fila:         #f7fbfe;
+  --borde:           #d7ecf7;
+  --texto-principal: #2e3338;
+  --texto-suave:     #6b7680;
+}
+
+body.dark {
+  --bg-body:         #1a1f24;
+  --bg-card:         #262d35;
+  --bg-input:        #1e252d;
+  --bg-fila:         #2b333c;
+  --borde:           #333d47;
+  --texto-principal: #e2e8ed;
+  --texto-suave:     #8a96a0;
+  --azul-fondo:      #1e2830;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-base);
+  background: var(--bg-body);
+  color: var(--texto-principal);
+  min-height: 100vh;
+  padding: 32px 20px 52px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid var(--azul-fuerte);
+  outline-offset: 2px;
+}
+
+.contenedor { max-width: 1040px; margin: 0 auto; }
+
+/* ── TOPBAR ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.topbar__titulo { font-family: var(--font-marca); font-size: 1.4rem; font-weight: 600; margin: 0; }
+
+.btn-volver, .btn-limpiar {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  background: transparent;
+  border: 1.5px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 8px 14px;
+  transition: all .15s;
+}
+
+.btn-volver:hover, .btn-limpiar:hover { border-color: var(--azul-fuerte); color: var(--azul-fuerte); }
+
+/* ── FILTROS ── */
+.filtros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.campo { display: flex; flex-direction: column; gap: 6px; }
+.campo--boton { justify-content: flex-end; }
+
+.campo label { font-size: 0.8rem; font-weight: 600; }
+
+.campo input, .campo select {
+  font-family: var(--font-base);
+  font-size: 0.88rem;
+  color: var(--texto-principal);
+  background: var(--bg-input);
+  border: 1.5px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 8px 10px;
+  width: 100%;
+}
+
+.campo input:focus, .campo select:focus { outline: none; border-color: var(--azul-fuerte); }
+
+.resumen { font-size: 0.8rem; color: var(--texto-suave); margin: 0 0 10px; }
+
+/* ── LISTA ── */
+.log-lista {
+  background: var(--bg-card);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  overflow: hidden;
+}
+
+.log-fila {
+  display: grid;
+  grid-template-columns: 130px 100px 1fr 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--borde);
+  font-size: 0.85rem;
+}
+
+.log-fila:last-child { border-bottom: none; }
+.log-fila:hover { background: var(--bg-fila); }
+
+.log-fila__fecha { color: var(--texto-suave); font-variant-numeric: tabular-nums; }
+
+.log-fila__modulo {
+  justify-self: start;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--azul-oscuro);
+  background: var(--azul-fondo);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.log-fila__accion { font-weight: 600; }
+.log-fila__registro, .log-fila__rol { font-weight: 400; color: var(--texto-suave); font-size: 0.8rem; }
+
+.vacio { padding: 24px; text-align: center; color: var(--texto-suave); font-size: 0.9rem; margin: 0; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  body { padding: 20px 14px 40px; }
+  .log-fila { grid-template-columns: 1fr auto; gap: 4px 12px; }
+  .log-fila__fecha { grid-column: 1; }
+  .log-fila__modulo { grid-column: 2; grid-row: 1; justify-self: end; }
+  .log-fila__accion, .log-fila__usuario { grid-column: 1 / -1; }
+}

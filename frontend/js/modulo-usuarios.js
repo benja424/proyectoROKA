@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Verificamos sesión y que sea root
     const usuario = await verificarSesion();
+    if (!usuario) return;
     if (usuario.rol !== 'root') {
         window.location.href = '/sigsm/frontend/portal-admin.html';
         return;
@@ -26,10 +27,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             rol:       document.getElementById('rol').value
         };
 
-        // Validación básica
-        if (!datos.ci || !datos.nombre || !datos.apellido || !datos.user_name || !datos.pass || !datos.rol) {
-            mensaje.textContent = 'Completá todos los campos.';
-            mensaje.className   = 'mensaje-err';
+        // Validación en el navegador (las mismas reglas que ServicioUsuario.php en el servidor)
+        const errores = validarUsuario(datos);
+        if (errores.length) {
+            mostrarMensaje(mensaje, errores.join(' '), false);
             return;
         }
 
@@ -43,23 +44,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             const result = await response.json();
 
             if (!response.ok) {
-                mensaje.textContent = result.error;
-                mensaje.className   = 'mensaje-err';
+                mostrarMensaje(mensaje, result.error, false);
                 return;
             }
 
-            mensaje.textContent = 'Usuario registrado correctamente.';
-            mensaje.className   = 'mensaje-ok';
+            mostrarMensaje(mensaje, 'Usuario registrado correctamente.', true);
             form.reset();
             await cargarUsuarios();
 
         } catch (error) {
             console.error(error);
-            mensaje.textContent = 'Error de conexión con el servidor.';
-            mensaje.className   = 'mensaje-err';
+            mostrarMensaje(mensaje, 'Error de conexión con el servidor.', false);
         }
     });
 });
+
+// Mismas reglas que el servidor: CI de 7 u 8 dígitos, nombre y apellido con letras,
+// usuario de 3 a 30 caracteres y contraseña de al menos 8
+function validarUsuario(d) {
+    const errores = [];
+    const nombreValido = /^[\p{L}][\p{L} '\-]{1,29}$/u;
+    if (!/^\d{7,8}$/.test(d.ci))                errores.push('La CI debe tener 7 u 8 dígitos, sin puntos ni guion.');
+    if (!nombreValido.test(d.nombre))           errores.push('El nombre debe tener entre 2 y 30 letras.');
+    if (!nombreValido.test(d.apellido))         errores.push('El apellido debe tener entre 2 y 30 letras.');
+    if (!/^[a-zA-Z0-9._]{3,30}$/.test(d.user_name)) errores.push('El usuario debe tener entre 3 y 30 caracteres: letras, números, punto o guion bajo.');
+    if (d.pass.length < 8 || d.pass.length > 72) errores.push('La contraseña debe tener entre 8 y 72 caracteres.');
+    if (!d.rol)                                 errores.push('Elegí un rol.');
+    return errores;
+}
 
 // Carga y renderiza la lista de usuarios
 async function cargarUsuarios() {
@@ -74,27 +86,31 @@ async function cargarUsuarios() {
             return;
         }
 
-        lista.innerHTML = usuarios.map(u => `
-            <div class="doc-fila">
+        lista.innerHTML = usuarios.map(u => {
+            const activo = u.estado === 'Activo';
+            return `
+            <div class="doc-fila${activo ? '' : ' doc-fila--inactiva'}">
                 <div class="doc-fila__info">
-                    <div class="doc-fila__nombre">${u.nombre} ${u.apellido}</div>
-                    <div class="doc-fila__detalle">CI: ${u.ci} · Usuario: ${u.user_name}</div>
+                    <div class="doc-fila__nombre">${esc(u.nombre)} ${esc(u.apellido)}${activo ? '' : ' <span class="tag-inactivo">Inhabilitado</span>'}</div>
+                    <div class="doc-fila__detalle">CI: ${esc(u.ci)} · Usuario: ${esc(u.user_name)}</div>
                 </div>
                 <span class="doc-fila__rol">${u.rol.replace(/_/g, ' ')}</span>
-                <button class="btn-eliminar" data-ci="${u.ci}">Eliminar</button>
-            </div>
-        `).join('');
+                <button class="${activo ? 'btn-eliminar' : 'btn-activar'}" data-ci="${esc(u.ci)}"
+                        data-estado="${activo ? 'Inactivo' : 'Activo'}">${activo ? 'Inhabilitar' : 'Activar'}</button>
+            </div>`;
+        }).join('');
 
-        // Botones de eliminar
-        lista.querySelectorAll('.btn-eliminar').forEach(btn => {
+        // Botones de cambio de estado
+        lista.querySelectorAll('button[data-estado]').forEach(btn => {
             btn.addEventListener('click', async () => {
-                if (!confirm('¿Seguro que querés eliminar este usuario?')) return;
+                if (btn.dataset.estado === 'Inactivo'
+                    && !confirm('¿Inhabilitar este usuario? No podrá iniciar sesión, pero su historial se conserva.')) return;
 
                 try {
                     const response = await fetch('/sigsm/api/usuarios', {
-                        method:  'DELETE',
+                        method:  'PATCH',
                         headers: { 'Content-Type': 'application/json' },
-                        body:    JSON.stringify({ ci: btn.dataset.ci })
+                        body:    JSON.stringify({ ci: btn.dataset.ci, estado: btn.dataset.estado })
                     });
 
                     const result = await response.json();

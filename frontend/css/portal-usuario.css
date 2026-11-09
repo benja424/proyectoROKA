@@ -341,6 +341,16 @@ input:focus-visible {
   line-height: 1.35;
 }
 
+.encuestas[hidden] { display: none; }
+
+.encuesta-card__cat {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--azul-oscuro);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
 .encuesta-card__accion {
   font-size: 0.78rem;
   font-weight: 700;
@@ -348,8 +358,68 @@ input:focus-visible {
 }
 
 
+/* ── LISTA: detalle de cada documento ───── */
+.doc-fila { cursor: pointer; }
+.doc-fila__info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.doc-fila__detalle { font-size: 0.76rem; color: var(--gris-suave); }
+
+/* ── VISOR DE PDF ────────────────────────── */
+.visor[hidden] { display: none; }
+.visor { scroll-margin-top: 140px; }  /* que el encabezado fijo no tape el título */
+
+.visor__volver {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-base);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--azul-oscuro);
+  cursor: pointer;
+  margin-bottom: 14px;
+}
+
+.visor__volver:hover { color: var(--azul-fuerte); }
+
+.visor__titulo {
+  font-family: var(--font-marca);
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.visor__cat { font-size: 0.82rem; font-weight: 600; color: var(--azul-oscuro); margin: 0 0 8px; }
+.visor__desc { font-size: 0.9rem; color: var(--gris-suave); margin: 0 0 14px; line-height: 1.5; }
+.visor__desc:empty { display: none; }
+
+.visor__estado { font-size: 0.85rem; color: var(--gris-suave); margin: 0 0 10px; }
+.visor__estado:empty { display: none; }
+
+/* Las páginas del PDF se dibujan como imágenes (canvas) una debajo de otra */
+.visor__marco {
+  background: var(--gris-fila);
+  border: 1px solid var(--gris-borde);
+  border-radius: var(--radio);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  user-select: none;
+}
+
+.visor__marco:empty { display: none; }
+
+.visor__marco canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: var(--blanco);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+}
+
 /* ── RESPONSIVE ──────────────────────────── */
 @media (max-width: 480px) {
+  .visor__marco { padding: 6px; gap: 6px; }
   .marca__sistema { display: none; }
   .btn-login span { display: none; }
   

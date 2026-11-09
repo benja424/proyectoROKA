@@ -9,123 +9,133 @@
   <link rel="stylesheet" href="/sigsm/frontend/css/modulo-ambulancias.css">
 </head>
 <body>
+<script>if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');</script>
 
 <div class="contenedor">
 
-  <!-- Topbar -->
   <div class="topbar">
     <h1 class="topbar__titulo">Módulo Ambulancias</h1>
     <a href="/sigsm/frontend/portal-admin.html" class="btn-volver">← Volver al portal</a>
   </div>
 
-  <!-- Cards ambulancias -->
-  <p class="seccion-titulo">Estado de unidades</p>
-  <div class="ambulancias-grid">
+  <!-- Estado de la flota (viene de la vista v_vehiculo_estado) -->
+  <p class="seccion-titulo">Estado de vehículos</p>
+  <div class="ambulancias-grid" id="flota"></div>
 
-    <div class="ambulancia-card">
-      <div class="ambulancia-card__header">
-        <span class="ambulancia-card__nombre">Unidad 01</span>
-        <span class="ambulancia-card__patente">SBQ 1234</span>
-      </div>
-      <span class="estado estado--disponible">Disponible</span>
-      <p class="ambulancia-card__info">Ambulancia de traslado general. Sin chofer asignado actualmente.</p>
-    </div>
-
-    <div class="ambulancia-card">
-      <div class="ambulancia-card__header">
-        <span class="ambulancia-card__nombre">Unidad 02</span>
-        <span class="ambulancia-card__patente">SBQ 5678</span>
-      </div>
-      <span class="estado estado--en-traslado">En traslado</span>
-      <p class="ambulancia-card__info">En camino a destino. Salida: 14:30 — Destino: Paysandú.</p>
-    </div>
-
-    <div class="ambulancia-card">
-      <div class="ambulancia-card__header">
-        <span class="ambulancia-card__nombre">Unidad 03</span>
-        <span class="ambulancia-card__patente">SBQ 9012</span>
-      </div>
-      <span class="estado estado--no-disponible">No disponible</span>
-      <p class="ambulancia-card__info">Unidad en mantenimiento. Retorno estimado: 18:00 hs.</p>
-    </div>
-
-  </div>
-
-  <!-- Formulario nuevo pedido -->
-  <p class="seccion-titulo">Registrar nuevo pedido de traslado</p>
+  <!-- Formulario de petición -->
+  <p class="seccion-titulo" id="form-titulo">Registrar nuevo pedido de traslado</p>
   <div class="form-card">
-    <form onsubmit="return false;">
+    <form id="form-traslado" novalidate>
+      <p class="mensaje" id="form-mensaje" role="status"></p>
+
+      <!-- Bloque fijo: datos comunes -->
       <div class="form-grid">
-
         <div class="campo">
-          <label for="pedido-unidad">Unidad asignada</label>
-          <select id="pedido-unidad">
-            <option value="" disabled selected>Seleccioná una unidad</option>
-            <option>Unidad 01 — SBQ 1234 (Disponible)</option>
-            <option disabled>Unidad 02 — SBQ 5678 (En traslado)</option>
-            <option disabled>Unidad 03 — SBQ 9012 (No disponible)</option>
+          <label for="razon">Razón del traslado</label>
+          <input type="text" id="razon" maxlength="150" placeholder="Motivo de la petición" required>
+        </div>
+        <div class="campo">
+          <label for="destino">Destino</label>
+          <input type="text" id="destino" maxlength="150" placeholder="Dirección o institución de destino" required>
+        </div>
+        <div class="campo">
+          <label for="hora_salida">Fecha y hora de salida</label>
+          <input type="datetime-local" id="hora_salida" required>
+        </div>
+        <div class="campo">
+          <label for="tipo_elemento">¿Qué se traslada?</label>
+          <select id="tipo_elemento" required>
+            <option value="Paciente">Paciente</option>
+            <option value="Organo">Órgano</option>
+            <option value="Muestra_biologica">Muestra biológica</option>
+            <option value="Insumo_medico">Insumo médico</option>
+            <option value="Documento">Documento</option>
+            <option value="Equipamiento">Equipamiento</option>
           </select>
         </div>
-
-        <div class="campo">
-          <label for="pedido-chofer">Chofer</label>
-          <select id="pedido-chofer">
-            <option value="" disabled selected>Seleccioná un chofer</option>
-            <option>Carlos Rodríguez</option>
-            <option>María González</option>
-            <option>Luis Pérez</option>
-            <option>Ana Martínez</option>
-            <option>Roberto Silva</option>
-            <option>Laura Fernández</option>
-            <option>Diego López</option>
-            <option>Patricia Díaz</option>
-          </select>
-        </div>
-
-        <div class="campo">
-          <label for="pedido-enfermero">Enfermero/a</label>
-          <select id="pedido-enfermero">
-            <option value="" disabled selected>Seleccioná un enfermero/a</option>
-            <option>Julia Méndez</option>
-            <option>Sebastián Torres</option>
-            <option>Valentina Herrera</option>
-            <option>Andrés Morales</option>
-          </select>
-        </div>
-
-        <div class="campo">
-          <label for="pedido-horario">Horario de salida</label>
-          <input type="time" id="pedido-horario">
-        </div>
-
-        <div class="campo campo--full">
-          <label for="pedido-direccion">Dirección de destino</label>
-          <input type="text" id="pedido-direccion" placeholder="Ej: Av. 18 de Julio 1234, Montevideo">
-        </div>
-
-        <div class="campo campo--full">
-          <label for="pedido-observaciones">Observaciones</label>
-          <textarea id="pedido-observaciones" placeholder="Tipo de traslado, indicaciones especiales, etc."></textarea>
-        </div>
-
       </div>
+
+      <!-- Bloque variable: paciente -->
+      <div class="form-bloque" id="bloque-paciente">
+        <p class="form-subtitulo">Datos del paciente</p>
+        <div class="campo">
+          <label for="documento">Documento (CI)</label>
+          <input type="text" id="documento" inputmode="numeric" maxlength="10" placeholder="Solo números, sin puntos ni guión">
+          <p class="ayuda" id="ayuda-paciente"></p>
+        </div>
+        <div class="checks" style="margin-top:12px">
+          <label class="check"><input type="checkbox" id="requiere_oxigeno"> Requiere oxígeno</label>
+          <label class="check"><input type="checkbox" id="requiere_aislamiento"> Requiere aislamiento</label>
+          <label class="check"><input type="checkbox" id="requiere_camilla"> Requiere camilla</label>
+          <label class="check"><input type="checkbox" id="no_autonomo"> No es autónomo</label>
+        </div>
+      </div>
+
+      <!-- Bloque variable: item -->
+      <div class="form-bloque" id="bloque-item" hidden>
+        <p class="form-subtitulo">Datos del elemento</p>
+        <div class="form-grid">
+          <div class="campo">
+            <label for="item_nombre">Nombre</label>
+            <input type="text" id="item_nombre" maxlength="80">
+          </div>
+          <div class="campo">
+            <label for="item_caracteristicas">Características</label>
+            <input type="text" id="item_caracteristicas" maxlength="255" placeholder="Opcional">
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehículo y personal -->
+      <div class="form-grid">
+        <div class="campo campo--full">
+          <label for="matricula">Vehículo</label>
+          <select id="matricula" required></select>
+          <p class="ayuda" id="ayuda-vehiculo"></p>
+        </div>
+        <div class="campo">
+          <label for="chofer">Chofer</label>
+          <input type="text" id="chofer" maxlength="60" required>
+        </div>
+        <div class="campo">
+          <label for="enfermero">Enfermero/a</label>
+          <input type="text" id="enfermero" maxlength="60" required>
+        </div>
+        <div class="campo campo--full">
+          <label for="observaciones">Observaciones</label>
+          <textarea id="observaciones" maxlength="255" placeholder="Opcional"></textarea>
+        </div>
+      </div>
+
       <div class="form-footer">
-        <button type="submit" class="btn-registrar">Registrar pedido</button>
+        <button type="button" class="btn-secundario" id="btn-cancelar-edicion" hidden>Cancelar edición</button>
+        <button type="submit" class="btn-registrar" id="btn-guardar">Registrar traslado</button>
       </div>
     </form>
   </div>
 
+  <!-- Historial -->
+  <p class="seccion-titulo seccion-titulo--margen">Historial de traslados</p>
+  <div class="filtros">
+    <div class="campo"><label for="f-documento">Documento del paciente</label><input type="text" id="f-documento" inputmode="numeric"></div>
+    <div class="campo"><label for="f-matricula">Vehículo</label><select id="f-matricula"><option value="">Todos</option></select></div>
+    <div class="campo"><label for="f-estado">Estado</label>
+      <select id="f-estado">
+        <option value="">Todos</option>
+        <option value="Solicitado">Solicitado</option>
+        <option value="En_curso">En curso</option>
+        <option value="En_destino">En destino</option>
+        <option value="Retornado">Retornado</option>
+        <option value="Cancelado">Cancelado</option>
+      </select>
+    </div>
+  </div>
+  <div class="lista-tras" id="historial"></div>
+
 </div>
 
-<script>
-  if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');
-</script>
-
-  <script src="/sigsm/frontend/js/auth.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      await verificarSesion();
-    });
-  </script>
+<script src="/sigsm/frontend/js/comun.js"></script>
+<script src="/sigsm/frontend/js/auth.js"></script>
+<script src="/sigsm/frontend/js/modulo-ambulancias.js"></script>
 </body>
 </html>

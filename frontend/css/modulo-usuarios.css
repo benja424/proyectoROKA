@@ -220,6 +220,31 @@ select:focus-visible {
 
 .btn-eliminar:hover { background: var(--rojo-fondo); border-color: var(--rojo); }
 
+.btn-activar {
+  background: transparent;
+  border: 1.5px solid var(--borde);
+  border-radius: var(--radio);
+  color: var(--azul-oscuro);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  flex-shrink: 0;
+  transition: all .15s;
+}
+
+.btn-activar:hover { border-color: var(--azul-fuerte); }
+
+.doc-fila--inactiva .doc-fila__nombre,
+.doc-fila--inactiva .doc-fila__detalle,
+.doc-fila--inactiva .doc-fila__rol { opacity: .55; }
+
+.tag-inactivo {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--rojo);
+  margin-left: 6px;
+}
+
 .cargando {
   padding: 24px;
   text-align: center;

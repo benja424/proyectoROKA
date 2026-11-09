@@ -1,0 +1,97 @@
+/* ============================================
+   S.I.G.S.M. — Encuesta para pacientes (mobile-first)
+   ============================================ */
+
+:root {
+  --azul-fuerte: #00aeef;
+  --azul-oscuro: #047aa6;
+  --azul-fondo:  #eaf7fd;
+  --blanco:      #ffffff;
+  --gris-texto:  #2e3338;
+  --gris-suave:  #6b7680;
+  --gris-borde:  #d7ecf7;
+  --rojo:        #b91c1c;
+  --radio:       8px;
+  --font-marca:  'Source Serif 4', Georgia, serif;
+  --font-base:   'Inter', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-base);
+  color: var(--gris-texto);
+  background: var(--blanco);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+button { font-family: inherit; cursor: pointer; }
+
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--azul-fuerte);
+  outline-offset: 2px;
+}
+
+.site-header { border-bottom: 1px solid var(--gris-borde); }
+.header-inner { max-width: 720px; margin: 0 auto; padding: 10px 16px; }
+.marca__logo { height: 64px; width: auto; display: block; }
+
+.contenedor { max-width: 720px; margin: 0 auto; padding: 20px 16px 48px; }
+
+.volver { display: inline-block; font-size: 0.85rem; font-weight: 600; color: var(--azul-oscuro); text-decoration: none; margin-bottom: 18px; }
+
+section[hidden] { display: none; }
+
+.cat { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--azul-oscuro); margin: 0 0 4px; }
+h1 { font-family: var(--font-marca); font-size: 1.45rem; font-weight: 600; margin: 0 0 8px; line-height: 1.25; }
+.desc { color: var(--gris-suave); margin: 0 0 6px; }
+.desc:empty { display: none; }
+.anonima { font-size: 0.8rem; color: var(--gris-suave); background: var(--azul-fondo); border-radius: var(--radio); padding: 8px 12px; margin: 10px 0 22px; }
+
+/* Preguntas */
+.pregunta { border: 1px solid var(--gris-borde); border-radius: var(--radio); padding: 14px; margin: 0 0 14px; }
+.pregunta legend { float: left; width: 100%; font-weight: 600; font-size: 0.95rem; padding: 0; margin-bottom: 10px; }
+.pregunta legend + * { clear: both; }
+.pregunta--error { border-color: var(--rojo); }
+
+/* Escala 1 a 5: botones grandes, fáciles de tocar */
+.escala { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.escala input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.escala label {
+  display: flex; align-items: center; justify-content: center;
+  height: 48px; border: 1.5px solid var(--gris-borde); border-radius: var(--radio);
+  font-weight: 700; font-size: 1.05rem; cursor: pointer; user-select: none;
+}
+.escala input:checked + label { background: var(--azul-fuerte); border-color: var(--azul-fuerte); color: var(--blanco); }
+.escala input:focus-visible + label { outline: 3px solid var(--azul-fuerte); outline-offset: 2px; }
+.escala__extremos { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--gris-suave); margin-top: 6px; }
+
+.pregunta textarea {
+  width: 100%; min-height: 90px; resize: vertical;
+  font-family: var(--font-base); font-size: 0.95rem; color: var(--gris-texto);
+  border: 1.5px solid var(--gris-borde); border-radius: var(--radio); padding: 10px 12px;
+}
+.pregunta textarea:focus { outline: none; border-color: var(--azul-fuerte); }
+.opcional { font-weight: 400; color: var(--gris-suave); font-size: 0.8rem; }
+
+.mensaje { color: var(--rojo); font-weight: 600; font-size: 0.9rem; margin: 0 0 12px; }
+.mensaje:empty { display: none; }
+
+.btn-enviar {
+  display: inline-block; width: 100%; text-align: center; text-decoration: none;
+  background: var(--azul-fuerte); color: var(--blanco); border: none; border-radius: var(--radio);
+  padding: 13px 20px; font-size: 1rem; font-weight: 700;
+}
+.btn-enviar:hover { background: var(--azul-oscuro); }
+.btn-enviar:disabled { opacity: .6; cursor: default; }
+
+.aviso { text-align: center; padding: 30px 0; }
+.aviso p { color: var(--gris-suave); margin: 0 0 22px; }
+
+@media (min-width: 600px) {
+  .btn-enviar { width: auto; }
+  .contenedor { padding-top: 28px; }
+}

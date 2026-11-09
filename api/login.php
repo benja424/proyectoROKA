@@ -1,40 +1,31 @@
 <?php
-// Endpoint de login — recibe usuario y contraseña, devuelve datos de sesión
-require_once __DIR__ . '/../backend/models/Usuario.php';
+// Endpoint de login — recibe usuario y contraseña y abre la sesión
+require_once __DIR__ . '/../backend/negocio/Autorizacion.php';
+require_once __DIR__ . '/../backend/models/Log.php';
 
-header('Content-Type: application/json; charset=utf-8');
-session_start();
+Autorizacion::exigirMetodo('POST');
+$datos = Autorizacion::leerJson();
+$user  = trim((string) ($datos['user'] ?? ''));
+$pass  = (string) ($datos['pass'] ?? '');
 
-// Solo aceptamos POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['error' => 'Método no permitido']);
-    exit;
+if ($user === '' || $pass === '') {
+    throw new ReglaNegocioException('Ingresá usuario y contraseña.', 400);
 }
 
-// Leemos el body JSON que manda el frontend
-$datos = json_decode(file_get_contents('php://input'), true);
+$usuario = (new Usuario())->login($user, $pass);
 
-// Validamos que vengan los dos campos
-if (!isset($datos['user']) || !isset($datos['pass'])) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Debe ingresar usuario y contraseña']);
-    exit;
+if ($usuario === null) {
+    throw new ReglaNegocioException('Usuario o contraseña incorrectos', 401);
 }
-
-$usuario   = new Usuario();
-$resultado = $usuario->login($datos['user'], $datos['pass']);
-
-// Si no encontró el usuario devolvemos 401
-if ($resultado === null) {
-    http_response_code(401);
-    echo json_encode(['error' => 'Usuario o contraseña incorrectos']);
-    exit;
+if ($usuario['estado'] !== 'Activo') {
+    throw new ReglaNegocioException('Usuario inhabilitado. Contactá al administrador.', 403);
 }
+unset($usuario['estado']);
 
-// Guardamos el usuario en la sesión y respondemos
-$_SESSION['usuario'] = $resultado;
-echo json_encode([
-    'mensaje' => 'Login correcto',
-    'usuario' => $resultado
-]);
+// Nuevo id de sesión al iniciar (evita que alguien reutilice un id de sesión anterior)
+Autorizacion::iniciarSesion();
+session_regenerate_id(true);
+$_SESSION['usuario'] = $usuario;
+
+Log::registrar($usuario['ci'], 'Inicia sesión', Log::SESION);
+echo json_encode(['mensaje' => 'Login correcto', 'usuario' => $usuario]);

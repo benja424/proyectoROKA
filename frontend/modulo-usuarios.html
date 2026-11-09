@@ -63,7 +63,7 @@
 
       </div>
 
-      <p id="mensaje-form" style="font-size:0.85rem; min-height:20px;"></p>
+      <p id="mensaje-form" class="mensaje" style="font-size:0.85rem; min-height:20px;" role="status"></p>
 
       <div class="form-footer">
         <button type="submit" class="btn-agregar">Registrar usuario</button>
@@ -79,10 +79,11 @@
 
 </div>
 
-<script src="/sigsm/frontend/js/auth.js"></script>
-<script src="/sigsm/frontend/js/modulo-usuarios.js"></script>
 <script>
   if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');
 </script>
+<script src="/sigsm/frontend/js/comun.js"></script>
+<script src="/sigsm/frontend/js/auth.js"></script>
+<script src="/sigsm/frontend/js/modulo-usuarios.js"></script>
 </body>
 </html>

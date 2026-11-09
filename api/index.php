@@ -1,38 +1,42 @@
 <?php
-// Router principal — todas las llamadas a /sigsm/api/* pasan por acá
+// Router principal — todas las llamadas a /sigsm/api/* pasan por acá (ver .htaccess).
+// Centraliza lo que antes se repetía en cada endpoint: el tipo de respuesta (JSON),
+// la configuración de la cookie de sesión y el manejo de errores.
+require_once __DIR__ . '/../backend/negocio/ReglaNegocioException.php';
+
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST');
 
-// Obtenemos la URL y la dividimos en segmentos
-$uri      = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$segments = explode('/', trim($uri, '/'));
+// Cookie de sesión: no accesible desde JavaScript (httponly) ni enviada desde otros sitios (samesite)
+session_set_cookie_params(['httponly' => true, 'samesite' => 'Lax']);
 
-// Removemos "sigsm" y "api" del inicio para quedarnos con el recurso
-if ($segments[0] === 'sigsm') array_shift($segments);
-if ($segments[0] === 'api')   array_shift($segments);
+// Cualquier excepción que no se atrape en el endpoint termina acá:
+// - ReglaNegocioException: error esperado (validación o regla) → se le explica al usuario
+// - cualquier otra: error inesperado → se guarda en el log de Apache y no se filtran detalles
+set_exception_handler(function (Throwable $e) {
+    if ($e instanceof ReglaNegocioException) {
+        http_response_code($e->getHttp());
+        echo json_encode(['error' => $e->getMessage(), 'errores' => $e->getErrores()]);
+        return;
+    }
+    error_log('[sigsm] ' . $e->getMessage() . ' en ' . $e->getFile() . ':' . $e->getLine());
+    http_response_code(500);
+    echo json_encode(['error' => 'Error interno del servidor']);
+});
 
-$resource = $segments[0] ?? '';
+// /sigsm/api/traslados?id=5 → "traslados"
+$segmentos = explode('/', trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
+$recurso   = $segmentos[array_search('api', $segmentos, true) + 1] ?? '';
 
-// Redirigimos al archivo correspondiente según el recurso
-switch ($resource) {
-    case 'login':
-        require_once __DIR__ . '/login.php';
-        exit;
+$endpoints = [
+    'login', 'logout', 'sesion', 'usuarios', 'logs',
+    'traslados', 'vehiculos', 'pacientes',
+    'documentos', 'categorias', 'pdf', 'encuestas',
+];
 
-    case 'logout':
-        require_once __DIR__ . '/logout.php';
-        exit;
-
-    case 'sesion':
-        require_once __DIR__ . '/sesion.php';
-        exit;
-
-    case 'usuarios':
-        require_once __DIR__ . '/usuarios.php';
-        exit;
-
-    default:
-        http_response_code(404);
-        echo json_encode(['error' => 'Endpoint no encontrado']);
+if (!in_array($recurso, $endpoints, true)) {
+    http_response_code(404);
+    echo json_encode(['error' => 'Endpoint no encontrado']);
+    exit;
 }
+
+require __DIR__ . "/$recurso.php";

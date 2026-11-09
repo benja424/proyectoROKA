@@ -1,0 +1,1 @@
+Carpeta donde se guardan los PDF subidos desde el Módulo Documentación.

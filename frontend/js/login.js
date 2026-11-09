@@ -5,8 +5,13 @@ const mensaje    = document.getElementById('mensaje');
 formulario.addEventListener('submit', async (e) => {
     e.preventDefault(); // Evitamos que recargue la página
 
-    const user = document.getElementById('usuario').value;
+    const user = document.getElementById('usuario').value.trim();
     const pass = document.getElementById('contrasena').value;
+
+    if (!user || !pass) {
+        mensaje.textContent = 'Ingresá usuario y contraseña.';
+        return;
+    }
 
     try {
         // Llamamos a la API de login

@@ -16,111 +16,142 @@
   <div class="topbar">
     <h1 class="topbar__titulo">Módulo Documentación</h1>
     <div class="topbar__acciones">
+      <button type="button" class="btn-volver" id="btn-qr-portal">QR del portal</button>
       <a href="/sigsm/frontend/portal-admin.html" class="btn-volver">← Volver al portal</a>
     </div>
   </div>
 
-  <!-- Formulario nuevo documento -->
-  <p class="seccion-titulo">Agregar documento</p>
+  <!-- Formulario de documento (alta y edición) -->
+  <p class="seccion-titulo" id="form-titulo">Agregar documento</p>
   <div class="form-card">
-    <form onsubmit="return false;">
+    <form id="form-doc" novalidate>
+      <p class="mensaje" id="form-mensaje" role="status"></p>
       <div class="form-grid">
 
         <div class="campo campo--full">
           <label for="doc-nombre">Nombre del documento</label>
-          <input type="text" id="doc-nombre" placeholder="Ej: Preparación para estudios imagenológicos">
+          <input type="text" id="doc-nombre" maxlength="150" placeholder="Ej: Preparación para estudios imagenológicos" required>
         </div>
 
         <div class="campo">
           <label for="doc-categoria">Categoría</label>
-          <select id="doc-categoria">
-            <option value="" disabled selected>Seleccioná una categoría</option>
-            <option>Estudios y diagnóstico</option>
-            <option>Cirugía y procedimientos</option>
-            <option>Tratamientos y medicación</option>
-            <option>Nefrología y trasplante</option>
-            <option>Otras pautas</option>
-          </select>
+          <select id="doc-categoria" required></select>
+        </div>
+
+        <div class="campo" id="campo-nueva" hidden>
+          <label for="doc-nueva">Nombre de la nueva categoría</label>
+          <input type="text" id="doc-nueva" maxlength="60" placeholder="Ej: Cardiología">
         </div>
 
         <div class="campo">
+          <label for="doc-subcategoria">Subcategoría <span class="opcional">(opcional)</span></label>
+          <input type="text" id="doc-subcategoria" maxlength="60" placeholder="Ej: Imagenología">
+        </div>
+
+        <div class="campo campo--full">
+          <label for="doc-descripcion">Descripción <span class="opcional">(opcional)</span></label>
+          <textarea id="doc-descripcion" maxlength="255" placeholder="Breve descripción para el paciente"></textarea>
+        </div>
+
+        <div class="campo campo--full">
           <label for="doc-archivo">Archivo PDF</label>
-          <input type="file" id="doc-archivo" accept=".pdf">
+          <input type="file" id="doc-archivo" accept="application/pdf,.pdf">
+          <p class="ayuda" id="ayuda-archivo">Solo PDF, hasta 10 MB.</p>
         </div>
 
       </div>
       <div class="form-footer">
-        <button type="submit" class="btn-agregar">Agregar documento</button>
+        <button type="button" class="btn-secundario" id="btn-cancelar" hidden>Cancelar edición</button>
+        <button type="submit" class="btn-agregar" id="btn-guardar">Agregar documento</button>
       </div>
     </form>
   </div>
 
   <!-- Lista de documentos cargados -->
   <p class="seccion-titulo">Documentos cargados</p>
-  <div class="doc-lista">
+  <div class="filtros">
+    <input type="search" id="f-texto" placeholder="Buscar por nombre o subcategoría" aria-label="Buscar documento">
+    <select id="f-categoria" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
+  </div>
+  <div class="doc-lista" id="lista-docs"></div>
 
-    <div class="doc-fila">
-      <span class="doc-fila__titulo">Preparación para estudios imagenológicos</span>
-      <span class="doc-fila__cat">Estudios y diagnóstico</span>
-      <button class="btn-eliminar">Eliminar</button>
-    </div>
+  <!-- ============ ENCUESTAS DE SATISFACCIÓN ============ -->
+  <p class="seccion-titulo seccion-titulo--margen" id="enc-form-titulo">Crear encuesta</p>
+  <div class="form-card">
+    <form id="form-enc" novalidate>
+      <p class="mensaje" id="enc-mensaje" role="status"></p>
+      <div class="form-grid">
 
-    <div class="doc-fila">
-      <span class="doc-fila__titulo">Estudios diagnósticos con pertecneciato</span>
-      <span class="doc-fila__cat">Estudios y diagnóstico</span>
-      <button class="btn-eliminar">Eliminar</button>
-    </div>
+        <div class="campo campo--full">
+          <label for="enc-titulo">Título</label>
+          <input type="text" id="enc-titulo" maxlength="120" placeholder="Ej: Encuesta estándar de satisfacción" required>
+        </div>
 
-    <div class="doc-fila">
-      <span class="doc-fila__titulo">Centellograma de perfusión miocárdica</span>
-      <span class="doc-fila__cat">Estudios y diagnóstico</span>
-      <button class="btn-eliminar">Eliminar</button>
-    </div>
+        <div class="campo">
+          <label for="enc-categoria">Categoría</label>
+          <select id="enc-categoria" required></select>
+        </div>
 
-    <div class="doc-fila">
-      <span class="doc-fila__titulo">Indicaciones de interrupción voluntaria del embarazo</span>
-      <span class="doc-fila__cat">Cirugía y procedimientos</span>
-      <button class="btn-eliminar">Eliminar</button>
-    </div>
+        <div class="campo">
+          <label for="enc-estado">Estado</label>
+          <select id="enc-estado">
+            <option value="Privada">Privada (no se muestra en el portal)</option>
+            <option value="Publica">Pública</option>
+          </select>
+        </div>
 
-    <div class="doc-fila">
-      <span class="doc-fila__titulo">Prostatectomía radical — indicaciones e información</span>
-      <span class="doc-fila__cat">Cirugía y procedimientos</span>
-      <button class="btn-eliminar">Eliminar</button>
-    </div>
+        <div class="campo campo--full" id="enc-campo-nueva" hidden>
+          <label for="enc-nueva">Nombre de la nueva categoría</label>
+          <input type="text" id="enc-nueva" maxlength="60">
+        </div>
 
-    <div class="doc-fila">
-      <span class="doc-fila__titulo">Indicaciones para pacientes en tratamiento con warfarina</span>
-      <span class="doc-fila__cat">Tratamientos y medicación</span>
-      <button class="btn-eliminar">Eliminar</button>
-    </div>
+        <div class="campo campo--full">
+          <label for="enc-descripcion">Descripción <span class="opcional">(opcional)</span></label>
+          <textarea id="enc-descripcion" maxlength="255" placeholder="Se muestra al paciente antes de responder"></textarea>
+        </div>
 
-    <div class="doc-fila">
-      <span class="doc-fila__titulo">Indicaciones para ingreso a centro de nefrología y trasplante</span>
-      <span class="doc-fila__cat">Nefrología y trasplante</span>
-      <button class="btn-eliminar">Eliminar</button>
-    </div>
+        <div class="campo campo--full">
+          <span class="campo__label">Preguntas</span>
+          <div class="preguntas" id="enc-preguntas"></div>
+          <button type="button" class="btn-secundario btn-chico" id="enc-agregar">+ Agregar pregunta</button>
+          <p class="ayuda">Escala: el paciente elige del 1 al 5 (obligatoria). Texto: respuesta libre (opcional).</p>
+        </div>
 
-    <div class="doc-fila">
-      <span class="doc-fila__titulo">Plan de alta de enfermería — Nefrología</span>
-      <span class="doc-fila__cat">Nefrología y trasplante</span>
-      <button class="btn-eliminar">Eliminar</button>
-    </div>
-
-    <div class="doc-fila">
-      <span class="doc-fila__titulo">Prevención de infecciones</span>
-      <span class="doc-fila__cat">Nefrología y trasplante</span>
-      <button class="btn-eliminar">Eliminar</button>
-    </div>
-
-    <div class="doc-fila">
-      <span class="doc-fila__titulo">Pauta para pacientes ostomizados</span>
-      <span class="doc-fila__cat">Otras pautas</span>
-      <button class="btn-eliminar">Eliminar</button>
-    </div>
-
+      </div>
+      <div class="form-footer">
+        <button type="button" class="btn-secundario" id="enc-cancelar" hidden>Cancelar edición</button>
+        <button type="submit" class="btn-agregar" id="enc-guardar">Crear encuesta</button>
+      </div>
+    </form>
   </div>
 
+  <p class="seccion-titulo">Encuestas</p>
+  <div class="doc-lista" id="lista-enc"></div>
+
+  <!-- Resultados de la encuesta elegida -->
+  <section class="resultados" id="resultados" hidden>
+    <div class="resultados__cabecera">
+      <p class="seccion-titulo" id="res-titulo"></p>
+      <button type="button" class="btn-secundario btn-chico" id="res-cerrar">Cerrar</button>
+    </div>
+    <div class="form-card" id="res-contenido"></div>
+  </section>
+
+</div>
+
+<!-- Ventana del código QR (se imprime sola, sin el resto de la página) -->
+<div class="qr-fondo" id="qr-fondo" hidden>
+  <div class="qr-caja" role="dialog" aria-modal="true" aria-labelledby="qr-titulo">
+    <p class="qr-hospital">Hospital de Clínicas Dr. Manuel Quintela</p>
+    <h2 class="qr-titulo" id="qr-titulo"></h2>
+    <div class="qr-imagen" id="qr-imagen"></div>
+    <p class="qr-ayuda">Escaneá el código con la cámara del celular</p>
+    <p class="qr-url" id="qr-url"></p>
+    <div class="qr-acciones">
+      <button type="button" class="btn-secundario" id="qr-cerrar">Cerrar</button>
+      <button type="button" class="btn-agregar" id="qr-imprimir">Imprimir</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -128,11 +159,10 @@
   if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');
 </script>
 
+  <script src="/sigsm/frontend/js/comun.js"></script>
   <script src="/sigsm/frontend/js/auth.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      await verificarSesion();
-    });
-  </script>
+  <script src="/sigsm/frontend/js/lib/qrcode.js"></script>
+  <script src="/sigsm/frontend/js/modulo-documentacion.js"></script>
+  <script src="/sigsm/frontend/js/encuestas-admin.js"></script>
 </body>
 </html>

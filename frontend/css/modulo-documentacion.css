@@ -242,8 +242,204 @@ select:focus-visible {
   border-color: var(--rojo);
 }
 
+/* ── AGREGADOS: CRUD DE DOCUMENTOS ───────── */
+.campo[hidden] { display: none; }
+
+.campo textarea {
+  font-family: var(--font-base);
+  font-size: 0.9rem;
+  color: var(--texto-principal);
+  background: var(--bg-input);
+  border: 1.5px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 9px 12px;
+  width: 100%;
+  min-height: 64px;
+  resize: vertical;
+}
+
+.campo textarea:focus { outline: none; border-color: var(--azul-fuerte); }
+
+.opcional { font-weight: 400; color: var(--texto-suave); }
+.ayuda { font-size: 0.76rem; color: var(--texto-suave); margin: 0; }
+
+.mensaje { font-size: 0.85rem; font-weight: 600; margin: 0 0 12px; }
+.mensaje:empty { display: none; }
+.mensaje-ok  { color: #16a34a; }
+.mensaje-err { color: var(--rojo); }
+
+.form-footer { gap: 10px; }
+
+.btn-secundario {
+  padding: 10px 18px;
+  background: transparent;
+  color: var(--texto-suave);
+  border: 1.5px solid var(--borde);
+  border-radius: var(--radio);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.btn-secundario:hover { border-color: var(--azul-fuerte); color: var(--azul-fuerte); }
+
+.filtros {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.filtros input, .filtros select {
+  font-family: var(--font-base);
+  font-size: 0.88rem;
+  color: var(--texto-principal);
+  background: var(--bg-input);
+  border: 1.5px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 8px 12px;
+  width: 100%;
+}
+
+.filtros input:focus, .filtros select:focus { outline: none; border-color: var(--azul-fuerte); }
+
+.doc-fila__info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.doc-fila__detalle { font-size: 0.76rem; color: var(--texto-suave); }
+
+.btn-ver, .btn-editar {
+  background: transparent;
+  border: 1.5px solid var(--borde);
+  border-radius: var(--radio);
+  color: var(--azul-oscuro);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  flex-shrink: 0;
+  transition: all .15s;
+}
+
+.btn-ver:hover, .btn-editar:hover { border-color: var(--azul-fuerte); }
+
+.vacio { padding: 24px; text-align: center; color: var(--texto-suave); font-size: 0.9rem; margin: 0; }
+
 /* ── RESPONSIVE ──────────────────────────── */
 @media (max-width: 520px) {
   .form-grid { grid-template-columns: 1fr; }
   .doc-fila__cat { display: none; }
+  .filtros { grid-template-columns: 1fr; }
+  .doc-fila { flex-wrap: wrap; }
+  .doc-fila__info { flex-basis: 100%; }
+}
+/* ── ENCUESTAS ───────────────────────────── */
+.seccion-titulo--margen { margin-top: 40px; }
+.campo__label { font-size: 0.83rem; font-weight: 600; }
+.btn-chico { padding: 7px 12px; font-size: 0.82rem; align-self: flex-start; }
+
+.preguntas { display: flex; flex-direction: column; gap: 8px; }
+
+.pregunta {
+  display: grid;
+  grid-template-columns: 24px 1fr 140px auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.pregunta__num { font-size: 0.8rem; font-weight: 700; color: var(--texto-suave); text-align: right; }
+
+.pregunta input, .pregunta select {
+  font-family: var(--font-base);
+  font-size: 0.88rem;
+  color: var(--texto-principal);
+  background: var(--bg-input);
+  border: 1.5px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 8px 10px;
+  width: 100%;
+}
+
+.pregunta input:focus, .pregunta select:focus { outline: none; border-color: var(--azul-fuerte); }
+
+.btn-quitar {
+  background: transparent;
+  border: none;
+  color: var(--rojo);
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 4px 6px;
+}
+
+.tag-estado {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  flex-shrink: 0;
+}
+
+.tag-estado--publica { color: #16a34a; background: #f0fdf4; }
+.tag-estado--privada { color: var(--texto-suave); background: var(--gris-fila); border: 1px solid var(--borde); }
+
+/* Resultados */
+.resultados { margin-top: 20px; }
+.resultados[hidden] { display: none; }
+.resultados__cabecera { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.resultados__cabecera .seccion-titulo { margin: 0; }
+
+.res-total { font-size: 0.85rem; color: var(--texto-suave); margin: 0 0 18px; }
+.res-pregunta { margin-bottom: 22px; }
+.res-pregunta:last-child { margin-bottom: 0; }
+.res-enunciado { font-size: 0.9rem; font-weight: 600; margin: 0 0 4px; }
+.res-promedio { font-size: 0.82rem; color: var(--azul-oscuro); font-weight: 600; margin: 0 0 8px; }
+
+.res-barra { display: grid; grid-template-columns: 18px 1fr 34px; gap: 8px; align-items: center; font-size: 0.78rem; margin-bottom: 4px; }
+.res-barra__fondo { background: var(--gris-fila); border: 1px solid var(--borde); border-radius: 4px; height: 12px; overflow: hidden; }
+.res-barra__relleno { background: var(--azul-fuerte); height: 100%; }
+.res-barra__num { color: var(--texto-suave); text-align: right; }
+
+.res-textos { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.res-textos li { font-size: 0.85rem; background: var(--gris-fila); border: 1px solid var(--borde); border-radius: var(--radio); padding: 8px 12px; }
+
+@media (max-width: 520px) {
+  .pregunta { grid-template-columns: 1fr auto; }
+  .pregunta__num { display: none; }
+  .pregunta select { grid-column: 1; }
+}
+
+/* ── VENTANA DEL QR ──────────────────────── */
+.qr-fondo {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10;
+}
+
+.qr-fondo[hidden] { display: none; }
+
+.qr-caja {
+  background: #ffffff;
+  color: #2e3338;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.qr-hospital { font-size: 0.78rem; font-weight: 600; color: var(--azul-oscuro); margin: 0 0 6px; }
+.qr-titulo { font-family: var(--font-marca); font-size: 1.1rem; margin: 0 0 14px; }
+.qr-imagen svg { width: 100%; max-width: 240px; height: auto; display: block; margin: 0 auto; }
+.qr-ayuda { font-size: 0.85rem; margin: 12px 0 4px; }
+.qr-url { font-size: 0.7rem; color: #6b7680; word-break: break-all; margin: 0 0 16px; }
+.qr-acciones { display: flex; justify-content: center; gap: 10px; }
+
+/* Al imprimir solo sale el QR */
+@media print {
+  body { padding: 0; background: #fff; }
+  .contenedor { display: none; }
+  .qr-fondo { position: static; background: none; padding: 0; }
+  .qr-caja { max-width: none; }
+  .qr-acciones { display: none; }
 }
